@@ -96,19 +96,13 @@
         // active state
         menu.querySelectorAll("li").forEach(li => li.classList.remove("active"));
         item.classList.add("active");
-
-        // label logic
+        // label logic + varCount
         if (btn.id === "varBtn") {
           btn.textContent = `${item.textContent} Variables ▼`;
-        } else {
-          if (!btn.classList.contains("fixed-label")) {
-            if (btn.id === "varBtn") {
-              btn.textContent = `${item.textContent} Variables ▼`;
-            } else {
-              btn.textContent = `${item.textContent} ▼`;
-            }
-          }
-
+          varCount = parseInt(item.dataset.val, 10);
+        }
+        else if (!btn.classList.contains("fixed-label")) {
+          btn.textContent = `${item.textContent} ▼`;
         }
 
         menu.classList.remove("show");
@@ -183,6 +177,35 @@
     5: ["A","B","C","D","E"],
     6: ["A","B","C","D","E","F"]
   };
+  // ================= FILTER FUNCTIONS =================
+  
+  // filter Boolean Expression input
+  function filterExpression(input) {
+    const allowed = varMap[varCount].join("");
+    const regex = new RegExp(`[^${allowed}'()+]`, "gi");
+    input.value = input.value.replace(regex, "");
+  }
+  
+  // filter Minterm / Maxterm input
+  function filterTerm(input) {
+    const maxTerm = Math.pow(2, varCount) - 1;
+  
+    input.value = input.value
+      .split(",")
+      .map(v => v.trim())
+      .filter(v => {
+        const n = parseInt(v, 10);
+        return !isNaN(n) && n >= 0 && n <= maxTerm;
+      })
+      .join(", ");
+  }
+  
+  // ================= ATTACH EVENTS =================
+  origExpr.addEventListener("input", () => filterExpression(origExpr));
+  dcExpr.addEventListener("input", () => filterExpression(dcExpr));
+  
+  termInput.addEventListener("input", () => filterTerm(termInput));
+  dcTerm.addEventListener("input", () => filterTerm(dcTerm));
 </script>
 
 </body>
