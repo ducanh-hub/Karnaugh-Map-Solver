@@ -118,8 +118,9 @@
         item.classList.add("active");
         // label logic + varCount
         if (btn.id === "varBtn") {
-          btn.textContent = `${item.textContent} Variables ▼`;
           varCount = parseInt(item.dataset.val, 10);
+          btn.textContent = `${varCount} Variables ▼`;
+          updateAllowedVars();
         }
         else if (!btn.classList.contains("fixed-label")) {
           btn.textContent = `${item.textContent} ▼`;
@@ -162,7 +163,7 @@
   document.querySelectorAll("#formBtn + .dropdown-menu li").forEach(item => {
     item.addEventListener("click", () => {
       currentForm = item.textContent;
-  
+      document.getElementById("formBtn").textContent = `${currentForm} ▼`;
       if (currentForm === "SOP") {
         termTitle.textContent = "Minterm";
         termInput.placeholder = "Minterm";
@@ -219,13 +220,27 @@
       })
       .join(", ");
   }
-  
+  const origExpr = document.getElementById("origExpr");
+  const dcExpr = document.getElementById("dcExpr");
+  const dcTerm = document.getElementById("dcTerm");
   // ================= ATTACH EVENTS =================
   origExpr.addEventListener("input", () => filterExpression(origExpr));
   dcExpr.addEventListener("input", () => filterExpression(dcExpr));
   
   termInput.addEventListener("input", () => filterTerm(termInput));
   dcTerm.addEventListener("input", () => filterTerm(dcTerm));
+  const instrToggle = document.querySelector(".instruction-toggle");
+  const instrPanel = document.getElementById("expressionInstruction");
+  
+  instrToggle.addEventListener("click", () => {
+    instrPanel.style.display =
+      instrPanel.style.display === "block" ? "none" : "block";
+  });
+  function updateAllowedVars() {
+    document.getElementById("allowedVars").textContent =
+      varMap[varCount].join(", ");
+  }
+  updateAllowedVars();
 </script>
 
 </body>
