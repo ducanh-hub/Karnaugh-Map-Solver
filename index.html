@@ -16,13 +16,12 @@
       <button class="dropdown-btn fixed-label" id="definedByBtn">
         Defined by ▼
       </button>
-      <ul class="dropdown-menu scroll">
-        <li>K-map</li>
-        <li>Boolean Expression</li>
-        <li>Minterms</li>
-        <li>Maxterms</li>
-        <li>Truth Table</li>
-        <li>Truth Table</li>
+      <ul class="dropdown-menu scroll" id="definedByMenu">
+        <li data-target="kmap">K-map</li>
+        <li data-target="expression">Boolean Expression</li>
+        <li data-target="term">Minterms</li>
+        <li data-target="term">Maxterms</li>
+        <li data-target="truth">Truth Table</li>
       </ul>
     </div>
 
@@ -54,10 +53,31 @@
 
   <!-- MAIN CONTENT -->
   <main class="content">
-    <p class="placeholder">
-      Output area (K-map / Truth Table / Result)<br>
-      Scroll appears when content is large.
-    </p>
+  
+    <section id="expression" class="block">
+      <h2>Boolean Expression</h2>
+      <input id="origExpr" placeholder="Original Expression">
+      <input id="dcExpr" placeholder="Don't Care Expression">
+      <input id="simpExpr" placeholder="Simplified Expression" disabled>
+    </section>
+  
+    <section id="term" class="block">
+      <h2 id="termTitle">Minterm</h2>
+      <input id="termInput" placeholder="Minterm">
+      <input id="dcTerm" placeholder="Don't Care Term">
+      <input id="termAfter" placeholder="After Simplify" disabled>
+    </section>
+  
+    <section id="truth" class="block">
+      <h2>Truth Table</h2>
+      <p>Truth table visualization</p>
+    </section>
+  
+    <section id="kmap" class="block">
+      <h2>K-map</h2>
+      <p>K-map visualization</p>
+    </section>
+  
   </main>
 </div>
 
@@ -104,6 +124,65 @@
       }
     });
   });
+  // Scroll to section when Defined by selected
+  const definedByMenu = document.getElementById("definedByMenu");
+  
+  definedByMenu.querySelectorAll("li").forEach(item => {
+    item.addEventListener("click", () => {
+      const targetId = item.dataset.target;
+      const section = document.getElementById(targetId);
+      if (!section) return;
+  
+      section.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    });
+  });
+  let currentForm = "SOP";
+  
+  const termTitle = document.getElementById("termTitle");
+  const termInput = document.getElementById("termInput");
+  const simpExpr = document.getElementById("simpExpr");
+  
+  document.querySelectorAll("#formBtn + .dropdown-menu li").forEach(item => {
+    item.addEventListener("click", () => {
+      currentForm = item.textContent;
+  
+      if (currentForm === "SOP") {
+        termTitle.textContent = "Minterm";
+        termInput.placeholder = "Minterm";
+        simpExpr.placeholder = "SOP Simplified Expression";
+      } else {
+        termTitle.textContent = "Maxterm";
+        termInput.placeholder = "Maxterm";
+        simpExpr.placeholder = "POS Simplified Expression";
+      }
+    });
+  });
+  let currentMode = null;
+  
+  ["origExpr", "dcExpr"].forEach(id => {
+    document.getElementById(id).addEventListener("focus", () => {
+      currentMode = "expression";
+      console.log("MODE: EXPRESSION");
+    });
+  });
+  
+  ["termInput", "dcTerm"].forEach(id => {
+    document.getElementById(id).addEventListener("focus", () => {
+      currentMode = "term";
+      console.log("MODE: TERM");
+    });
+  });
+  let varCount = 4;
+  const varMap = {
+    2: ["A","B"],
+    3: ["A","B","C"],
+    4: ["A","B","C","D"],
+    5: ["A","B","C","D","E"],
+    6: ["A","B","C","D","E","F"]
+  };
 </script>
 
 </body>
