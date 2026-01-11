@@ -103,3 +103,20 @@ body {
   color: #666;
   font-size: 14px;
 }
+.block {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin-bottom: 48px;
+}
+
+.block h2 {
+  margin-top: 0;
+}
+
+.block input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
