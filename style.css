@@ -119,4 +119,20 @@ body {
   padding: 8px;
   margin-bottom: 10px;
 }
+.instruction-toggle {
+  padding: 6px 10px;
+  background: #eee;
+  border: 1px solid #aaa;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.instruction-panel {
+  display: none;
+  margin-top: 10px;
+  padding: 10px;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  font-size: 13px;
+}
 
