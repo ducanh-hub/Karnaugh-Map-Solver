@@ -13,7 +13,9 @@
 
     <!-- Defined by -->
     <div class="dropdown">
-      <button class="dropdown-btn" id="definedByBtn">Defined by ▼</button>
+      <button class="dropdown-btn fixed-label" id="definedByBtn">
+        Defined by ▼
+      </button>
       <ul class="dropdown-menu scroll">
         <li>K-map</li>
         <li>Boolean Expression</li>
@@ -78,7 +80,14 @@
         if (btn.id === "varBtn") {
           btn.textContent = `${item.textContent} Variables ▼`;
         } else {
-          btn.textContent = `${item.textContent} ▼`;
+          if (!btn.classList.contains("fixed-label")) {
+            if (btn.id === "varBtn") {
+              btn.textContent = `${item.textContent} Variables ▼`;
+            } else {
+              btn.textContent = `${item.textContent} ▼`;
+            }
+          }
+
         }
 
         menu.classList.remove("show");
