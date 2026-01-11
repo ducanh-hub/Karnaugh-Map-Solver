@@ -59,6 +59,26 @@
       <input id="origExpr" placeholder="Original Expression">
       <input id="dcExpr" placeholder="Don't Care Expression">
       <input id="simpExpr" placeholder="Simplified Expression" disabled>
+      <button class="instruction-toggle">Instruction ▼</button>
+      <div class="instruction-panel" id="expressionInstruction">
+        <p><strong>Instruction</strong></p>
+      
+        <p>
+          <strong>Allowed variables:</strong>
+          <span id="allowedVars">A, B, C, D</span>
+        </p>
+      
+        <p><strong>Operators:</strong></p>
+        <ul>
+          <li>+ = OR</li>
+          <li>* = AND</li>
+          <li>' = NOT</li>
+          <li>( ) = GROUP</li>
+        </ul>
+      
+        <p>Invalid characters will be removed automatically.</p>
+      </div>
+
     </section>
   
     <section id="term" class="block">
@@ -182,7 +202,7 @@
   // filter Boolean Expression input
   function filterExpression(input) {
     const allowed = varMap[varCount].join("");
-    const regex = new RegExp(`[^${allowed}'()+]`, "gi");
+    const regex = new RegExp(`[^${allowed}'()+* ]`, "gi");
     input.value = input.value.replace(regex, "");
   }
   
