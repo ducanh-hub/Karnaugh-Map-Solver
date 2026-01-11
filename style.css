@@ -135,4 +135,13 @@ body {
   border: 1px solid #ccc;
   font-size: 13px;
 }
+.dropdown-menu.no-scroll {
+  max-height: none;
+  overflow-y: visible;
+}
+.dropdown-menu.no-scroll {
+  max-height: none;
+  overflow-y: visible;
+}
+
 
