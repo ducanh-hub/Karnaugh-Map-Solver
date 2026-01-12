@@ -162,7 +162,7 @@
       }
     });
   });
-  
+  const termAfter = document.getElementById("termAfter");
   let currentForm = "SOP";
   function setForm(form) {
     currentForm = form;
@@ -173,19 +173,22 @@
     if (form === "SOP") {
       termTitle.textContent = "Minterm";
       termInput.placeholder = "Minterm";
+      termAfter.placeholder = "Minterm After Simplify";
       simpExpr.placeholder = "SOP Simplified Expression";
     } else {
       termTitle.textContent = "Maxterm";
       termInput.placeholder = "Maxterm";
+      termAfter.placeholder = "Maxterm After Simplify";
       simpExpr.placeholder = "POS Simplified Expression";
     }
   
-    // active state trong dropdown
-    document.querySelectorAll("#formBtn + .dropdown-menu li")
+    document
+      .querySelectorAll("#formBtn + .dropdown-menu li")
       .forEach(li => {
         li.classList.toggle("active", li.textContent === form);
       });
   }
+
   const termTitle = document.getElementById("termTitle");
   const termInput = document.getElementById("termInput");
   const simpExpr = document.getElementById("simpExpr");
