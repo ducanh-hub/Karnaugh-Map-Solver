@@ -208,17 +208,32 @@
   }
   
   // filter Minterm / Maxterm input
-  function filterTerm(input) {
-    const maxTerm = Math.pow(2, varCount) - 1;
+  function filterTermRealtime(input) {
+    // chỉ cho số, dấu phẩy và space
+    let v = input.value.replace(/[^0-9, ]/g, "");
   
-    input.value = input.value
-      .split(",")
-      .map(v => v.trim())
-      .filter(v => {
-        const n = parseInt(v, 10);
-        return !isNaN(n) && n >= 0 && n <= maxTerm;
-      })
-      .join(", ");
+    // không cho nhiều dấu phẩy liên tiếp
+    v = v.replace(/,+/g, ",");
+  
+    const maxTerm = (1 << varCount) - 1;
+  
+    const parts = v.split(",");
+  
+    for (let i = 0; i < parts.length; i++) {
+      const t = parts[i].trim();
+  
+      // đang gõ dở → cho qua
+      if (t === "") continue;
+  
+      const n = Number(t);
+  
+      // vượt range hoặc không phải số → xóa ngay
+      if (!Number.isInteger(n) || n < 0 || n > maxTerm) {
+        parts[i] = "";
+      }
+    }
+  
+    input.value = parts.join(",");
   }
   const origExpr = document.getElementById("origExpr");
   const dcExpr = document.getElementById("dcExpr");
@@ -227,8 +242,13 @@
   origExpr.addEventListener("input", () => filterExpression(origExpr));
   dcExpr.addEventListener("input", () => filterExpression(dcExpr));
   
-  termInput.addEventListener("input", () => filterTerm(termInput));
-  dcTerm.addEventListener("input", () => filterTerm(dcTerm));
+  termInput.addEventListener("input", () =>
+    filterTermRealtime(termInput)
+  );
+  
+  dcTerm.addEventListener("input", () =>
+    filterTermRealtime(dcTerm)
+  );
   const instrToggle = document.querySelector(".instruction-toggle");
   const instrPanel = document.getElementById("expressionInstruction");
   
