@@ -139,35 +139,38 @@
       }
     });
   });
-  let currentDefinedBy = "Minterms";
+  // Scroll to section when Defined by selected
+  const definedByMenu = document.getElementById("definedByMenu");
+  
+  definedByMenu.querySelectorAll("li").forEach(item => {
+    item.addEventListener("click", () => {
+      const targetId = item.dataset.target;
+      const section = document.getElementById(targetId);
+      if (section) {
+        section.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+  
+      // 🔥 AUTO SWITCH SOP / POS
+      if (item.textContent === "Minterms") {
+        setForm("SOP");
+      }
+      if (item.textContent === "Maxterms") {
+        setForm("POS");
+      }
+    });
+  });
+  const termAfter = document.getElementById("termAfter");
   let currentForm = "SOP";
-  
-  function updateUIFromState() {
-    // Đồng bộ currentForm theo currentDefinedBy
-    if (currentDefinedBy === "Minterms") currentForm = "SOP";
-    else if (currentDefinedBy === "Maxterms") currentForm = "POS";
-  
-    // Cập nhật dropdown Defined by
-    const definedByBtn = document.getElementById("definedByBtn");
-    definedByBtn.textContent = currentDefinedBy + " ▼";
-    document.querySelectorAll("#definedByMenu li").forEach(li => {
-      li.classList.toggle("active", li.textContent === currentDefinedBy);
-    });
-  
-    // Cập nhật dropdown SOP/POS
+  function setForm(form) {
+    currentForm = form;
     const formBtn = document.getElementById("formBtn");
-    formBtn.textContent = currentForm + " ▼";
-    document.querySelectorAll("#formBtn + .dropdown-menu li").forEach(li => {
-      li.classList.toggle("active", li.textContent === currentForm);
-    });
   
-    // Cập nhật phần Term
-    const termTitle = document.getElementById("termTitle");
-    const termInput = document.getElementById("termInput");
-    const termAfter = document.getElementById("termAfter");
-    const simpExpr = document.getElementById("simpExpr");
+    formBtn.textContent = `${form} ▼`;
   
-    if (currentForm === "SOP") {
+    if (form === "SOP") {
       termTitle.textContent = "Minterm";
       termInput.placeholder = "Minterm";
       termAfter.placeholder = "Minterm After Simplify";
@@ -179,41 +182,32 @@
       simpExpr.placeholder = "POS Simplified Expression";
     }
   
-    // Hiển thị section tương ứng
-    document.querySelectorAll("main .block").forEach(block => block.style.display = "none");
-    let showSectionId = "term";
-    if (currentDefinedBy === "expression") showSectionId = "expression";
-    else if (currentDefinedBy === "kmap") showSectionId = "kmap";
-    else if (currentDefinedBy === "truth") showSectionId = "truth";
-  
-    const showSection = document.getElementById(showSectionId);
-    if (showSection) {
-      showSection.style.display = "block";
-      // 🔥 Scroll đến section tương ứng
-      showSection.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  
-  // Khi chọn Defined by
-  document.querySelectorAll("#definedByMenu li").forEach(li => {
-    li.addEventListener("click", () => {
-      currentDefinedBy = li.textContent;
-      updateUIFromState();
-    });
-  });
-  
-  // Khi chọn SOP/POS
-  document.querySelectorAll("#formBtn + .dropdown-menu li").forEach(li => {
-    li.addEventListener("click", () => {
-      currentForm = li.textContent;
-      // Đồng bộ definedBy khi đổi SOP/POS
-      currentDefinedBy = currentForm === "SOP" ? "Minterms" : "Maxterms";
-      updateUIFromState();
-    });
-  });
-  
-  // Gọi lần đầu để cập nhật UI
-  updateUIFromState();
+    document
+      .querySelectorAll("#formBtn + .dropdown-menu li")
+      .forEach(li => {
+        li.classList.toggle("active", li.textContent === form);
+      });
+  }
 
+  const termTitle = document.getElementById("termTitle");
+  const termInput = document.getElementById("termInput");
+  const simpExpr = document.getElementById("simpExpr");
+  
+  document.querySelectorAll("#formBtn + .dropdown-menu li").forEach(item => {
+    item.addEventListener("click", () => {
+      currentForm = item.textContent;
+      document.getElementById("formBtn").textContent = `${currentForm} ▼`;
+      if (currentForm === "SOP") {
+        termTitle.textContent = "Minterm";
+        termInput.placeholder = "Minterm";
+        simpExpr.placeholder = "SOP Simplified Expression";
+      } else {
+        termTitle.textContent = "Maxterm";
+        termInput.placeholder = "Maxterm";
+        simpExpr.placeholder = "POS Simplified Expression";
+      }
+    });
+  });
 
   let currentMode = null;
   
