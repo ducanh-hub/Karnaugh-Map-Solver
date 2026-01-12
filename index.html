@@ -114,8 +114,10 @@
     menu.querySelectorAll("li").forEach(item => {
       item.addEventListener("click", () => {
         // active state
-        menu.querySelectorAll("li").forEach(li => li.classList.remove("active"));
-        item.classList.add("active");
+        if (!btn.classList.contains("fixed-label")) {
+          menu.querySelectorAll("li").forEach(li => li.classList.remove("active"));
+          item.classList.add("active");
+        }
         // label logic + varCount
         if (btn.id === "varBtn") {
           varCount = parseInt(item.dataset.val, 10);
