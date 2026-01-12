@@ -146,16 +146,46 @@
     item.addEventListener("click", () => {
       const targetId = item.dataset.target;
       const section = document.getElementById(targetId);
-      if (!section) return;
+      if (section) {
+        section.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
   
-      section.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+      // 🔥 AUTO SWITCH SOP / POS
+      if (item.textContent === "Minterms") {
+        setForm("SOP");
+      }
+      if (item.textContent === "Maxterms") {
+        setForm("POS");
+      }
     });
   });
-  let currentForm = "SOP";
   
+  let currentForm = "SOP";
+  function setForm(form) {
+    currentForm = form;
+    const formBtn = document.getElementById("formBtn");
+  
+    formBtn.textContent = `${form} ▼`;
+  
+    if (form === "SOP") {
+      termTitle.textContent = "Minterm";
+      termInput.placeholder = "Minterm";
+      simpExpr.placeholder = "SOP Simplified Expression";
+    } else {
+      termTitle.textContent = "Maxterm";
+      termInput.placeholder = "Maxterm";
+      simpExpr.placeholder = "POS Simplified Expression";
+    }
+  
+    // active state trong dropdown
+    document.querySelectorAll("#formBtn + .dropdown-menu li")
+      .forEach(li => {
+        li.classList.toggle("active", li.textContent === form);
+      });
+  }
   const termTitle = document.getElementById("termTitle");
   const termInput = document.getElementById("termInput");
   const simpExpr = document.getElementById("simpExpr");
