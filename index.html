@@ -157,38 +157,51 @@
   
       // 🔥 AUTO SWITCH SOP / POS
       if (item.textContent === "Minterms") {
+        setDefinedBy("minterm");
         setForm("SOP");
       }
       if (item.textContent === "Maxterms") {
+        setDefinedBy("maxterm");
         setForm("POS");
       }
     });
   });
   const termAfter = document.getElementById("termAfter");
   let currentForm = "SOP";
+  
   function setForm(form) {
     currentForm = form;
-    const formBtn = document.getElementById("formBtn");
   
+    const formBtn = document.getElementById("formBtn");
     formBtn.textContent = `${form} ▼`;
   
-    if (form === "SOP") {
-      termTitle.textContent = "Minterm";
-      termInput.placeholder = "Minterm";
-      termAfter.placeholder = "Minterm After Simplify";
-      simpExpr.placeholder = "SOP Simplified Expression";
-    } else {
-      termTitle.textContent = "Maxterm";
-      termInput.placeholder = "Maxterm";
-      termAfter.placeholder = "Maxterm After Simplify";
-      simpExpr.placeholder = "POS Simplified Expression";
-    }
+    termAfter.placeholder =
+      form === "SOP"
+        ? "Minterm After Simplify"
+        : "Maxterm After Simplify";
+  
+    simpExpr.placeholder =
+      form === "SOP"
+        ? "SOP Simplified Expression"
+        : "POS Simplified Expression";
   
     document
       .querySelectorAll("#formBtn + .dropdown-menu li")
       .forEach(li => {
         li.classList.toggle("active", li.textContent === form);
       });
+  }
+  let currentDefinedBy = "minterm";
+  function setDefinedBy(type) {
+    currentDefinedBy = type;
+  
+    if (type === "minterm") {
+      termTitle.textContent = "Minterm";
+      termInput.placeholder = "Minterm";
+    } else {
+      termTitle.textContent = "Maxterm";
+      termInput.placeholder = "Maxterm";
+    }
   }
 
   const termTitle = document.getElementById("termTitle");
@@ -197,19 +210,10 @@
   
   document.querySelectorAll("#formBtn + .dropdown-menu li").forEach(item => {
     item.addEventListener("click", () => {
-      currentForm = item.textContent;
-      document.getElementById("formBtn").textContent = `${currentForm} ▼`;
-      if (currentForm === "SOP") {
-        termTitle.textContent = "Minterm";
-        termInput.placeholder = "Minterm";
-        simpExpr.placeholder = "SOP Simplified Expression";
-      } else {
-        termTitle.textContent = "Maxterm";
-        termInput.placeholder = "Maxterm";
-        simpExpr.placeholder = "POS Simplified Expression";
-      }
+      setForm(item.textContent);
     });
   });
+
 
   let currentMode = null;
   
@@ -297,6 +301,7 @@
       varMap[varCount].join(", ");
   }
   updateAllowedVars();
+  setDefinedBy(currentDefinedBy);
   setForm(currentForm);
 </script>
 
