@@ -114,7 +114,7 @@
     menu.querySelectorAll("li").forEach(item => {
       item.addEventListener("click", () => {
         // active state
-        if (!btn.classList.contains("fixed-label")) {
+        if (btn.id !== "definedByBtn") {
           menu.querySelectorAll("li").forEach(li => li.classList.remove("active"));
           item.classList.add("active");
         }
