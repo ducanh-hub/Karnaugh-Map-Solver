@@ -139,9 +139,5 @@ body {
   max-height: none;
   overflow-y: visible;
 }
-.dropdown-menu.no-scroll {
-  max-height: none;
-  overflow-y: visible;
-}
 
 
